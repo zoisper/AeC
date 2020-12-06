@@ -276,6 +276,11 @@ void bfs (GraphL g, int n)
     
 }
 
+void dists (GraphL g, int s, int dist[]) 
+{
+     
+}
+
 
 int main ()
 {
@@ -312,6 +317,10 @@ int main ()
     printf("Breadth-first traversal:\n");
     bfs(gl3, n3);
     putchar('\n');
+
+    //int i;
+    //for(i=0; i<n3; i++)
+        //printf("Pai %d :: %d\n",i, parent[i]);
 
 
     return 0;
