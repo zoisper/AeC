@@ -34,9 +34,9 @@ void initQueue (QUEUE *q)
     q->tamanho = 0;
 }
 
-int isEmptyQ (QUEUE *q)
+int isEmptyQ (QUEUE q)
 {
-    return q->tamanho == 0;
+    return q.tamanho == 0;
 }
 
 void enqueue (QUEUE *q, int x)
@@ -238,7 +238,7 @@ void bf_visit(GraphL g, int s)
     printf ("%d GRAY\n", s);
     parent[s] = 0;
     enqueue(&q, s);
-    while (! isEmptyQ (&q))
+    while (! isEmptyQ (q))
     {
         int u = dequeue (&q);
         struct edge * aux = g[u];
