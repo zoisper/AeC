@@ -276,53 +276,67 @@ void bfs (GraphL g, int n)
     
 }
 
+int calcDist (int orig, int dest)
+{
+    if (orig == dest)
+        return 0;
+    else
+        if (parent[dest] >=0)
+            return 1 + calcDist (orig, parent[dest]);
+    else
+        return -1;
+}
+
 void dists (GraphL g, int s, int dist[]) 
 {
-     
+    int i;
+    for(i=0; i<MAX; i++)
+    {
+        color[i] = WHITE;
+        parent[i] = -1;
+    }
+    QUEUE q;
+    initQueue (&q);
+    color[s] = GRAY;
+    enqueue(&q, s);
+    while (! isEmptyQ (q))
+    {
+        int u = dequeue (&q);
+        struct edge * aux = g[u];
+        while (aux)
+        {
+            if (color[aux->dest] == WHITE)
+            {
+                color[aux->dest] = GRAY;
+                parent[aux->dest] = u;
+                enqueue (&q, aux->dest);
+            }
+            aux = aux->next;
+        }
+        color[u] = BLACK;
+    }
+    for (i=0; i<MAX; i++)
+        dist[i] = calcDist (s, i);
 }
 
-
-int main ()
+void shortestPath (GraphL g, int s, int  d) 
 {
-    GraphM gm3 = {
-    {0, 1, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 1, 0, 0, 0, 1, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 1, 0},
-    {0, 0, 1, 0, 1, 0, 0, 1, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {1, 0, 0, 0, 1, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 1, 0, 1},
-    {0, 0, 0, 0, 1, 0, 1, 0, 0},
-    }; 
-    
-    //printGraphM (gm3, n3);
-    //putchar('\n');
+    int dist[MAX];
+    dists(g, s, dist);
+    int i;
+    if (dist[d] == -1)
+        printf ("%d nao alcancavel a partir de %d", d, s);
+    else
+    {
+        printf("Caminho inverso de %d para %d:\n", s, d);
+        while (s != d)
+        {
+            printf ("%d ", d);
+            d = parent[d];
+        }
+        printf("%d ",s );
 
-    GraphL gl3;
-    int n3 = 9;
-    graphMtoL(gl3, gm3, n3);
-
-    //printGraphL(gl3, n3);
-    //putchar('\n');
-   
-    //printDegreeL (gl3, n3);
-    //putchar('\n');
-
-    printf("Depth-first traversal:\n");
-    dfs(gl3, n3);
-    putchar('\n');
-
-
-    printf("Breadth-first traversal:\n");
-    bfs(gl3, n3);
-    putchar('\n');
-
-    //int i;
-    //for(i=0; i<n3; i++)
-        //printf("Pai %d :: %d\n",i, parent[i]);
-
-
-    return 0;
-     
+    }
 }
+
+
