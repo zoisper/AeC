@@ -16,7 +16,7 @@ void showArray (int v[], int N)
         printf ("%d ",v[i]);
 }
 
-//minHeaps
+//min-Heaps
 
 void minBubbleUp (int h[], int N)
 {
@@ -63,7 +63,7 @@ void decHeapSort (int h[], int N) // oredena array por ordem decrescente
     }
 }
 
-//maxHeaps
+//max-Heaps
 
 void maxBubbleUp (int h[], int N)
 {
