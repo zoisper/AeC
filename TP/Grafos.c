@@ -19,7 +19,7 @@ typedef struct edge *GraphL[MAX];
 typedef int GraphM[MAX][MAX];
 
 
-void printGraphM(GraphM g, int size)
+void printGraphM(GraphM g, int size) // inmprime Grafo Matriz
 {
     int i, j;
     for(i=0; i<size; i++)
@@ -33,7 +33,7 @@ void printGraphM(GraphM g, int size)
 }
 
 
-void printGraphL(GraphL g, int size)
+void printGraphL(GraphL g, int size) // Imprime Grafo Lista
 {
     int i;
     struct edge * aux = NULL;
@@ -47,7 +47,7 @@ void printGraphL(GraphL g, int size)
     }
 }
 
-void graphLtoM(GraphM gm, GraphL gl, int size)
+void graphLtoM(GraphM gm, GraphL gl, int size) // converte grafo lista para matriz
 {
     int i, j;
     struct edge * aux = NULL;
@@ -61,7 +61,7 @@ void graphLtoM(GraphM gm, GraphL gl, int size)
             gm[i][aux->dest] = aux->weight;
 }
 
-void graphMtoL(GraphL gl, GraphM gm, int size)
+void graphMtoL(GraphL gl, GraphM gm, int size) // converte grafo matriz para lista
 {
     int i, j;
     struct edge **ptr = NULL;
@@ -81,7 +81,7 @@ void graphMtoL(GraphL gl, GraphM gm, int size)
     }
 }
 
-int inDegreeM (GraphM g, int size, int v)
+int inDegreeM (GraphM g, int size, int v) // calcula grau de entrada do vertice v em grafo matriz
 {
     int i, r = 0;
     for(i=0; i<size; i++)
@@ -90,7 +90,7 @@ int inDegreeM (GraphM g, int size, int v)
     return r;
 }
 
-int outDegreeM (GraphM g, int size,  int v)
+int outDegreeM (GraphM g, int size, int v) // calcula grau de saida do vertice v em grafo matriz
 {
     int i, r = 0;
     for(i=0; i<size; i++)
@@ -100,7 +100,7 @@ int outDegreeM (GraphM g, int size,  int v)
 
 }
 
-int inDegreeL (GraphL g, int size, int v)
+int inDegreeL (GraphL g, int size, int v) // calcula grau de entrada do vertice v em grafo lista
 {
     int i, r = 0;
     struct edge * aux = NULL;
@@ -114,11 +114,11 @@ int inDegreeL (GraphL g, int size, int v)
     }
     return r;
 }
-int outDegreeL (GraphL gl, int v)
+int outDegreeL (GraphL g, int v) // calcula grau de saida do vertice v em grafo lista
 {
     int r = 0;
     struct edge * aux = NULL;
-    aux = gl[v];
+    aux = g[v];
     while (aux)
     {
         r++;
@@ -127,7 +127,7 @@ int outDegreeL (GraphL gl, int v)
     return r;
 }
 
-void printDegreeL (GraphL g, int size) // imprme graus de entrada e saida dos vertices do grafo
+void printDegreeL (GraphL g, int size) // imprime graus de entrada e saida dos vertices do grafo
 {
     int i, inDeg, outDeg;
 
@@ -222,7 +222,7 @@ int minEdge (int color[], int dist[], int size) // calcula qual a aresta com men
     return r;   
 }
 
-void calcPaths(GraphL g, int size, int source, int parent[]) // calcula caminhos menores partindo de source
+void calcPaths(GraphL g, int size, int source, int parent[]) // calcula caminhos menores partindo do vertice source
 {
     int i, fringe = 1, dist[size], color[size];
     struct edge * aux;
@@ -260,7 +260,7 @@ void calcPaths(GraphL g, int size, int source, int parent[]) // calcula caminhos
 }
 
 
-void showPathAux (GraphL g, int source, int destiny, int parent[])
+void showPathAux (GraphL g, int source, int destiny, int parent[]) // função auxiliar para imprimir caminhos do vertice source para o vertice destiny
 {
     
     if(source != destiny)
@@ -273,7 +273,7 @@ void showPathAux (GraphL g, int source, int destiny, int parent[])
         printf("%d ",source );       
 }
 
-void showPath (GraphL g, int source, int destiny, int parent[]) // Imprime caminho 
+void showPath (GraphL g, int source, int destiny, int parent[]) // Imprime caminho do vertice source para o vertice destiny
 {
     if (parent[destiny] == -2)
             printf ("%d nao alcancavel a partir de %d\n", destiny, source);
@@ -284,7 +284,7 @@ void showPath (GraphL g, int source, int destiny, int parent[]) // Imprime camin
         }
 }
 
-void showPathReverse (GraphL g, int source, int destiny, int parent[]) // Imprime caminho ao contrario
+void showPathReverse (GraphL g, int source, int destiny, int parent[]) // Imprime caminho invertido do vertice source para o vertice destiny
 {
     if (parent[destiny] == -2)
             printf ("%d nao alcancavel a partir de %d\n", destiny, source);
@@ -301,15 +301,13 @@ void showPathReverse (GraphL g, int source, int destiny, int parent[]) // Imprim
 } 
 
 
-void shortestPath (GraphL g, int size, int source, int destiny)
+void shortestPath (GraphL g, int size, int source, int destiny) // calcula e imprime caminho mais curto do source para o vertice destiny 
 {
     int parent[size];
     calcPaths(g, size, source, parent);
     showPath(g, source, destiny, parent);
     putchar('\n');
     showPathReverse(g, source, destiny, parent);
-    //putchar('\n');
-
 }
 
 
