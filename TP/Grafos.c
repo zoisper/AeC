@@ -5,6 +5,8 @@
 #define WHITE 0
 #define GRAY 1
 #define BLACK 2
+#define NE 0
+
 
 struct edge {
 int dest;
@@ -23,34 +25,23 @@ void printGraphM(GraphM g, int size)
     for(i=0; i<size; i++)
     {
         for(j=0; j<size; j++)
-        if (g[i][j] != 0)
-            printf ("1 ");
-        else
-            printf ("0 ");
+            printf ("%d ", g[i][j]);
+        
 
         putchar('\n');
     }
 }
 
-void printGraphM_Weight(GraphM g, int size) // imprime vertices com peso
-{
-    int i, j;
-    for(i=0; i<size; i++)
-    {
-        for(j=0; j<size; j++)
-            printf ("%d ",g[i][j]);
-        putchar('\n');
-    }
-}
 
-void printGraphL(GraphL gl, int size)
+void printGraphL(GraphL g, int size)
 {
     int i;
     struct edge * aux = NULL;
     for(i=0; i<size; i++)
     {
-        for (aux = gl[i]; aux; aux = aux->next)
-            printf ("%d ",aux->dest);
+        printf ("%d ",i);
+        for (aux = g[i]; aux; aux = aux->next)
+            printf ("--> (%d,%d) ",aux->dest, aux->weight);
             
         putchar('\n');
     }
@@ -231,7 +222,7 @@ int minEdge (int color[], int dist[], int size) // calcula qual a aresta com men
     return r;   
 }
 
-void calcPaths(GraphL g, int size, int source, int parent[]) // calcula caminhos menores partindo de v
+void calcPaths(GraphL g, int size, int source, int parent[]) // calcula caminhos menores partindo de source
 {
     int i, fringe = 1, dist[size], color[size];
     struct edge * aux;
@@ -317,6 +308,7 @@ void shortestPath (GraphL g, int size, int source, int destiny)
     showPath(g, source, destiny, parent);
     putchar('\n');
     showPathReverse(g, source, destiny, parent);
+    //putchar('\n');
 
 }
 
@@ -328,20 +320,25 @@ void shortestPath (GraphL g, int size, int source, int destiny)
 int main ()
 {
 
+    
     GraphM gm1 = {
-    {0, 1, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 1, 0, 0, 0, 1, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 1, 0},
-    {0, 0, 1, 0, 1, 0, 0, 1, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {1, 0, 0, 0, 1, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 1, 0, 1},
-    {0, 0, 0, 0, 1, 0, 1, 0, 0},
-    }; 
+    {NE,  0, NE, NE, NE,  0,  0, NE, NE},
+    { 2, NE,  4, NE, NE, NE,  6, NE, NE},
+    {NE,  4, NE,  2, NE, NE, NE,  2, NE},
+    {NE, NE,  2, NE,  1, NE, NE,  8, NE},
+    {NE, NE, NE,  1, NE,  6, NE, NE,  2},
+    { 7, NE, NE, NE,  6, NE, NE, NE,  5},
+    { 3,  6, NE, NE, NE, NE, NE,  3,  1},
+    {NE, NE,  2,  8, NE, NE,  3, NE,  4},
+    {NE, NE, NE, NE,  2,  5,  1,  4, NE}
+    };  
+
+    //printGraphM(gm1, 9);
 
     GraphL gl;
     graphMtoL (gl, gm1, 9 ); 
+
+    printGraphL(gl, 9);
     //dfs(gl, 9);
     //printf ("\n---------------------------------\n");
     //bfs(gl, 9);
