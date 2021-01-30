@@ -19,7 +19,7 @@ typedef struct edge *GraphL[MAX];
 typedef int GraphM[MAX][MAX];
 
 
-void printGraphM(GraphM g, int size) // inmprime Grafo Matriz
+void printGraphM(GraphM g, int size) // imprime Grafo Matriz
 {
     int i, j;
     for(i=0; i<size; i++)
@@ -300,7 +300,6 @@ void showPathReverse (GraphL g, int source, int destiny, int parent[]) // Imprim
         }
 } 
 
-
 void shortestPath (GraphL g, int size, int source, int destiny) // calcula e imprime caminho mais curto do source para o vertice destiny 
 {
     int parent[size];
@@ -311,6 +310,86 @@ void shortestPath (GraphL g, int size, int source, int destiny) // calcula e imp
 }
 
 
+void prim (GraphL gl, int size, int source, GraphM gm) // calcula a arvore geradora minima do grafo
+{
+    int i, v, len = 0, edges = size , fringe[size], color[size], parent[size];
+    struct edge * aux;
+    for(i=0; i<size; i++)
+    {
+        fringe[i] = 0;
+        color[i] = WHITE;
+        parent[i] = -2;    
+    }
+    color[source] = GRAY;
+    parent[source] = source;
+    v = source;
+    len++;
+
+    while(edges>0 && len>0)
+    {
+        
+        for(aux = gl[v]; aux; aux = aux->next)
+        {
+            if(color[aux->dest] == WHITE)
+            {
+                color[aux->dest] = GRAY;
+                parent[aux->dest] = v;
+                fringe[aux->dest] = aux->weight;
+                len++;
+            }
+            else    
+                if (color[aux->dest] == GRAY && fringe[aux->dest] > aux->weight)
+                {
+                    parent[aux->dest] = v;
+                    fringe[aux->dest] = aux->weight;
+                }
+        }
+        color[v] = BLACK;
+        v = minEdge(color, fringe, len);
+        edges--;
+        len--;
+    }
+
+    if(len == 0 && edges>0)
+        printf("Grafo não ligado\n");
+    for(i=0; i<size; i++)
+        gm[parent[i]][i] = fringe[i];
+}
+
+void FloydWarshall (GraphM g, GraphM d, int size, int paths[MAX][MAX])
+{
+    int i, j, k;
+    for(i=0; i<size; i++)
+        for(j=0; j<size; j++)
+        {
+            d[i][j] = g[i][j];
+                paths[i][j] = -1;
+        }
+
+    for(k=0; k<size; k++)
+        for(i=0; i<size; i++)
+            for(j=0; j<size; j++)
+            {
+                if(d[i][k] >0 && d[k][j] > 0 && d[i][k] + d[k][j] < d[i][j])
+                {
+                    d[i][j] = d[i][k] + d[k][j];
+                    paths[i][j] = k; 
+                }
+            }
+} 
+
+void showPathFloydWashal (int paths[MAX][MAX], int source, int destiny)
+{
+    {
+        while (destiny != -1)
+        {
+            printf("%d ", destiny);
+            destiny = paths[source][destiny];
+        }
+        printf("%d ", source);
+    }
+}
+
 
 
 
@@ -320,7 +399,7 @@ int main ()
 
     
     GraphM gm1 = {
-    {NE,  0, NE, NE, NE,  0,  0, NE, NE},
+    {NE,  2, NE, NE, NE,  7,  3, NE, NE},
     { 2, NE,  4, NE, NE, NE,  6, NE, NE},
     {NE,  4, NE,  2, NE, NE, NE,  2, NE},
     {NE, NE,  2, NE,  1, NE, NE,  8, NE},
@@ -329,21 +408,31 @@ int main ()
     { 3,  6, NE, NE, NE, NE, NE,  3,  1},
     {NE, NE,  2,  8, NE, NE,  3, NE,  4},
     {NE, NE, NE, NE,  2,  5,  1,  4, NE}
-    };  
+    };   
 
     //printGraphM(gm1, 9);
 
     GraphL gl;
     graphMtoL (gl, gm1, 9 ); 
 
-    printGraphL(gl, 9);
+    printGraphM(gm1, 9);
     //dfs(gl, 9);
     //printf ("\n---------------------------------\n");
     //bfs(gl, 9);
     //printf ("\n---------------------------------\n");
-    shortestPath(gl, 9,  3, 5);
+    //shortestPath(gl, 9,  3, 5);
     printf ("\n---------------------------------\n");
-    shortestPath(gl, 9, 3, 1);
+    //shortestPath(gl, 9, 3, 1);
+    //GraphM gm2;
+    //prim(gl, 9, 2, gm2);
+
+    //printGraphM(gm2, 9);
+    GraphM gm2;
+    int P[MAX][MAX];
+
+    FloydWarshall(gm1, gm2, 9, P);
+    showPathFloydWashal(P, 0, 1);
+    //printf("%d", P[0][1]);
 
 
 
