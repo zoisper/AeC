@@ -370,7 +370,7 @@ void FloydWarshall (GraphM g, GraphM d, int size, int paths[MAX][MAX])
         for(i=0; i<size; i++)
             for(j=0; j<size; j++)
             {
-                if(d[i][k] >0 && d[k][j] > 0 && d[i][k] + d[k][j] < d[i][j])
+                if(d[i][k] > 0 && d[k][j] > 0 && d[i][k] + d[k][j] < d[i][j])
                 {
                     d[i][j] = d[i][k] + d[k][j];
                     paths[i][j] = k; 
